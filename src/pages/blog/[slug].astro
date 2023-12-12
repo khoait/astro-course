@@ -1,0 +1,58 @@
+---
+import { Image, getImage } from "astro:assets";
+import { getCollection, type CollectionEntry } from "astro:content";
+import H1 from "../../components/H1.astro";
+import Main from "../../components/Main.astro";
+import Share from "../../components/Share.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import Layout from "../../layouts/Layout.astro";
+
+export const getStaticPaths = async () => {
+  const posts = await getCollection("posts");
+  const paths = posts.map((post) => ({
+    params: {
+      slug: post.slug,
+    },
+    props: {
+      post,
+    },
+  }));
+
+  return paths;
+};
+
+type Props = {
+  post: CollectionEntry<"posts">;
+};
+
+const { post } = Astro.props;
+
+const { Content, headings } = await post.render();
+
+const coverImageSource = (await getImage({ src: post.data.image })).src;
+---
+
+<Layout
+  title={post.data.title}
+  image={coverImageSource}
+  description={post.data.description}>
+  <Main>
+    <a href="/blog" class="mb-16 block text-2xl text-zinc-500"
+      >Back to all blogs</a
+    >
+    <H1 text={post.data.title} />
+
+    <Image
+      src={post.data.image}
+      alt={post.data.title}
+      class="mb-28 aspect-thumbnail rounded-2xl object-cover shadow-xl"
+    />
+    <div class="relative flex gap-x-12">
+      <Share post={post} />
+      <div class="prose prose-2xl relative overflow-visible">
+        <Content />
+      </div>
+      <TableOfContents headings={headings} />
+    </div>
+  </Main>
+</Layout>

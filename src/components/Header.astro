@@ -1,0 +1,17 @@
+---
+import { Image } from "astro:assets";
+import heartbeat from "../content/posts/images/heartbeat.png";
+---
+
+<header class="mx-auto w-full max-w-7xl px-24 py-12 max-sm:px-5 max-sm:py-10">
+  <a href="/" class="flex items-center gap-x-4">
+    <Image
+      src={heartbeat}
+      alt="rhythm nation logo"
+      width={64}
+      height={64}
+      class="w-16"
+    />
+    <p class="text-3xl uppercase text-zinc-900">Blog</p>
+  </a>
+</header>
